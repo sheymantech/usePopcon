@@ -1,12 +1,28 @@
+const containerStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "16px",
+};
+
+const starContainerStyle = {
+  display: "flex",
+  gap: "4px",
+};
+
+const textStyle = {
+  lineHieght: "1px",
+  margin: "0",
+};
+
 export default function StarRating() {
   return (
-    <div>
-      <div>
+    <div style={containerStyle}>
+      <div style={starContainerStyle}>
         {Array.from({ length: 5 }, (_, i) => (
           <span>S{1 + i}</span>
         ))}
       </div>
-      <p>10</p>
+      <p style={textStyle}>10</p>
     </div>
   );
 }
