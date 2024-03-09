@@ -60,7 +60,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(0);
   const [error, setError] = useState("");
 
-  const [selctedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   const [query, setQuery] = useState("inception");
 
@@ -70,6 +70,10 @@ export default function App() {
 
   function handleCloseMovies() {
     setSelectedId(null);
+  }
+
+  function handleAddWatch(movie) {
+    setWatched((watched) => [...watched, movie]);
   }
 
   useEffect(
@@ -132,10 +136,11 @@ export default function App() {
         </Box>
 
         <Box>
-          {selctedId ? (
+          {selectedId ? (
             <MovieDetails
-              selctedId={selctedId}
+              selectedId={selectedId}
               onCloseMovie={handleCloseMovies}
+              onAddWatched={handleAddWatch}
             />
           ) : (
             <>
@@ -249,7 +254,7 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({ selctedId, onCloseMovie }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -266,14 +271,28 @@ function MovieDetails({ selctedId, onCloseMovie }) {
     Genre: genre,
   } = movie;
 
+  function handleAdd() {
+    const newWatchedMovie = {
+      imdbId: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+    };
+
+    onAddWatched(newWatchedMovie);
+  }
+
   useEffect(
     function () {
       async function getMovieDetails() {
         setIsLoading(true);
         const resp = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&i=${selctedId}`
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
         );
         const data = await resp.json();
+        console.log(data);
         setMovie(data);
         setIsLoading(false);
       }
@@ -307,7 +326,7 @@ function MovieDetails({ selctedId, onCloseMovie }) {
           </header>
           <section>
             <div className="rating">
-              {!isWatched ? (
+              {/* {!isWatched ? (
                 <>
                   <StarRating
                     maxRating={10}
@@ -324,7 +343,12 @@ function MovieDetails({ selctedId, onCloseMovie }) {
                 <p>
                   You rated with movie {watchedUserRating} <span>⭐️</span>
                 </p>
-              )}
+              )} */}
+
+              <StarRating maxRating={10} size={24} />
+              <button className="btn-add" onClick={handleAdd}>
+                + Add to list
+              </button>
             </div>
             <p>
               <em>{plot}</em>
