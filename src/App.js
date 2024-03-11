@@ -6,9 +6,10 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const KEY = "9e95aa71";
-
 export default function App() {
   const [isOpen2, setIsOpen2] = useState(true);
+  const [query, setQuery] = useState("");
+
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function () {
     const storedValue = localStorage.getItem("watched");
@@ -17,9 +18,7 @@ export default function App() {
 
   const [selectedId, setSelectedId] = useState(null);
 
-  useMovies(query);
-
-  const [query, setQuery] = useState("");
+  const { movies, isLoading, error } = useMovies(query, handleCloseMovies);
 
   function handleSelectMovie(id) {
     setSelectedId((selctedId) => (id === selctedId ? null : id));
