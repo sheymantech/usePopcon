@@ -9,7 +9,7 @@ export function useMovies(query, callback) {
     function () {
       callback?.();
 
-      const controller = new AbortController();
+      // const controller = new AbortController();
       async function fetchMovies() {
         try {
           setIsLoading(true);
@@ -46,16 +46,11 @@ export function useMovies(query, callback) {
       if (query.length < 3) {
         setMovies([]);
         setError("");
-        return;
       }
       //   handleCloseMovies();
       fetchMovies();
-
-      return function () {
-        controller.abort();
-      };
     },
-    [query]
+    [query, callback]
   );
 
   return { movies, isLoading, error };

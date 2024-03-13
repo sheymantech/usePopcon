@@ -76,10 +76,6 @@ export default function App() {
       }
       handleCloseMovies();
       fetchMovies();
-
-      return function () {
-        controller.abort();
-      };
     },
     [query]
   );
